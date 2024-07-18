@@ -209,6 +209,9 @@ portBASE_TYPE xPortStartScheduler(void)
     g_esp_boot_ccount = soc_get_ccount();
     soc_set_ccount(0);
     _xt_tick_timer_init();
+    
+    /* call trace init function */
+    traceSTART();
 
     vTaskSwitchContext();
 

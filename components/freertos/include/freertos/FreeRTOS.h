@@ -304,7 +304,37 @@ extern "C" {
 #ifndef traceTASK_SWITCHED_IN
 	/* Called after a task has been selected to run.  pxCurrentTCB holds a pointer
 	to the task control block of the selected task. */
-	#define traceTASK_SWITCHED_IN()
+	#define traceTASK_SWITCHED_IN()													\								
+	{																				\	
+		/* set clock pin low*/														\							
+																					\
+		/* set data pin low*/														\							
+																					\
+		/* add debug code here to indicate which task is now running */				\																	
+		for(uint8_t charItr = 0; charItr < configMAX_TASK_NAME_LEN; charItr++)		\																			
+		{																			\		
+			uint8_t currentChar = pxCurrentTCB->pcTaskName[charItr];				\																	
+			/* for each bit in character */											\										
+			for(int bit = 0; bit < 8; bit++)										\											
+			{																		\			
+				/*	set clock pin high	*/											\										
+																					\				
+																					\
+				if(currentChar>>bit & 0x1)											\										
+				{																	\				
+					/* if bit is set then set data pin high */						\															
+																					\
+				}																	\				
+																					\
+				/* set clock pin low*/												\									
+																					\
+			}																		\			
+		}																			\		
+																					\
+		/* set clock pin low*/														\							
+																					\
+		/* set data pin low*/														\							
+	}																					
 #endif
 
 #ifndef traceINCREASE_TICK_COUNT
