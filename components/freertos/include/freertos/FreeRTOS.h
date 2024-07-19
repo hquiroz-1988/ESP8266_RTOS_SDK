@@ -318,7 +318,7 @@ extern bool traceStarted;
 		gpio_config(&io_conf);														\
 		traceStarted = true;														\
 		/* set clock pin high*/														\
-		gpio_set_level(CLOCK_PIN, 1);												\
+		gpio_set_level(GPIO_NUM_0, 1);												\
 	}
 
 #endif
