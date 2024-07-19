@@ -317,6 +317,8 @@ extern bool traceStarted;
 		/*configure GPIO with the given settings*/									\
 		gpio_config(&io_conf);														\
 		traceStarted = true;														\
+		/* set clock pin high*/														\
+		gpio_set_level(CLOCK_PIN, 1);												\
 	}
 
 #endif
@@ -338,8 +340,6 @@ extern bool traceStarted;
 		{																				\
 			/* set clock pin low*/														\
 			gpio_set_level(CLOCK_PIN, 0);												\
-			/* set data pin low*/														\
-			gpio_set_level(DATA_PIN, 0);												\
 			/* add debug code here to indicate which task is now running */				\
 			for(uint8_t charItr = 0; charItr < configMAX_TASK_NAME_LEN; charItr++)		\
 			{																			\
@@ -361,8 +361,6 @@ extern bool traceStarted;
 						}																	\
 						/*	set clock pin high	*/											\
 						gpio_set_level(CLOCK_PIN, 1);										\
-						/*	kill some instruction cycle		*/								\
-						gpio_set_level(CLOCK_PIN, 1);										\
 						/* set clock pin low*/												\
 						gpio_set_level(CLOCK_PIN, 0);										\
 					}																		\
@@ -372,8 +370,8 @@ extern bool traceStarted;
 					charItr = configMAX_TASK_NAME_LEN;									\
 				}																		\
 			}																			\
-			/* set clock pin low*/														\
-			gpio_set_level(CLOCK_PIN, 0);												\
+			/* set clock pin high*/														\
+			gpio_set_level(CLOCK_PIN, 1);												\
 			/* set data pin low*/														\
 			gpio_set_level(DATA_PIN, 0);												\
 		}																				\
