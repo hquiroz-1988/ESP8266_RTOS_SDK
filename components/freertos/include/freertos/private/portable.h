@@ -90,7 +90,7 @@ extern "C" {
 
 #include "mpu_wrappers.h"
 #include "esp_heap_caps.h"
-#include "gpio.h"
+#include "driver/gpio.h"
 
 /*
  * Setup the stack of a new task so it is ready to be placed under the

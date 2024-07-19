@@ -288,34 +288,35 @@ extern "C" {
 	#define portPOINTER_SIZE_TYPE uint32_t
 #endif
 
+
+#ifndef traceSTARTED
+extern bool traceStarted;
+#define traceSTARTED() (traceStarted)
+#endif
+
+
+
+
 /* Remove any unused trace macros. */
 #ifndef traceSTART
 	/* Used to perform any necessary initialisation - for example, open a file
 	into which trace is to be written. */
 	#define traceSTART()															\
 	{																				\
-		const uint32_t CLOCK_PIN = GPIO_NUM_0;										\
-		const uint32_t DATA_PIN = GPIO_NUM_2;										\
-		/*	Clock Pin */															\
-		gpio_set_direction(CLOCK_PIN, GPIO_MODE_OUTPUT);							\
-		gpio_pullup_dis(CLOCK_PIN);													\
-		gpio_set_intr_type(CLOCK_PIN, GPIO_INTR_DISABLE);							\
-		gpio_pullup_dis(CLOCK_PIN);													\
-		gpio_pin_reg_t pinReg;														\
-		pin_reg.val = READ_PERI_REG(GPIO_PIN_REG_0);								\
-		pin_reg.rtc_pin.func_low_bit = 0;											\
-        pin_reg.rtc_pin.func_high_bit = 0;											\
-		WRITE_PERI_REG(GPIO_PIN_REG_0, pin_reg.val);								\
-		/* Data Pin	 */																\
-		gpio_set_direction(DATA_PIN, GPIO_MODE_OUTPUT);								\
-		gpio_pullup_dis(DATA_PIN);													\
-		gpio_set_intr_type(DATA_PIN, GPIO_INTR_DISABLE);							\
-		gpio_pullup_dis(DATA_PIN);													\
-		gpio_pin_reg_t pinReg;														\
-		pin_reg.val = READ_PERI_REG(GPIO_PIN_REG_2);								\
-		pin_reg.rtc_pin.func_low_bit = 0;											\
-        pin_reg.rtc_pin.func_high_bit = 0;											\
-		WRITE_PERI_REG(GPIO_PIN_REG_2, pin_reg.val);								\
+		gpio_config_t io_conf;														\
+		/*disable interrupt*/														\
+		io_conf.intr_type = GPIO_INTR_DISABLE;										\
+		/*set as output mode*/														\
+		io_conf.mode = GPIO_MODE_OUTPUT;											\
+		/*bit mask of the pins that you want to set,e.g.GPIO15/16*/					\
+		io_conf.pin_bit_mask = GPIO_Pin_0 | GPIO_Pin_2;								\
+		/*disable pull-down mode*/													\
+		io_conf.pull_down_en = 0;													\
+		/*disable pull-up mode*/													\
+		io_conf.pull_up_en = 0;														\
+		/*configure GPIO with the given settings*/									\
+		gpio_config(&io_conf);														\
+		traceStarted = true;														\
 	}
 
 #endif
@@ -329,36 +330,53 @@ extern "C" {
 #ifndef traceTASK_SWITCHED_IN
 	/* Called after a task has been selected to run.  pxCurrentTCB holds a pointer
 	to the task control block of the selected task. */
-	#define traceTASK_SWITCHED_IN()													\
-	{																				\
-		const uint32_t CLOCK_PIN = GPIO_NUM_0;										\
-		const uint32_t DATA_PIN = GPIO_NUM_2;										\
-		/* set clock pin low*/														\
-		gpio_set_level(CLOCK_PIN, 0);												\
-		/* set data pin low*/														\
-		gpio_set_level(DATA_PIN, 0);												\
-		/* add debug code here to indicate which task is now running */				\
-		for(uint8_t charItr = 0; charItr < configMAX_TASK_NAME_LEN; charItr++)		\
-		{																			\
-			uint8_t currentChar = pxCurrentTCB->pcTaskName[charItr];				\
-			/* for each bit in character */											\
-			for(int bit = 0; bit < 8; bit++)										\
-			{																		\
-				/*	set clock pin high	*/											\
-				gpio_set_level(CLOCK_PIN, 1);										\
-				if(currentChar>>bit & 0x1)											\
-				{																	\
-					/* if bit is set then set data pin high */						\
-					gpio_set_level(DATA_PIN, 1);									\
-				}																	\
-				/* set clock pin low*/												\
-				gpio_set_level(CLOCK_PIN, 1);										\
-			}																		\
-		}																			\
-		/* set clock pin low*/														\
-		gpio_set_level(CLOCK_PIN, 0);												\
-		/* set data pin low*/														\
-		gpio_set_level(DATA_PIN, 1);												\
+	#define traceTASK_SWITCHED_IN()														\
+	{																					\
+		const uint32_t CLOCK_PIN = GPIO_NUM_0;											\
+		const uint32_t DATA_PIN = GPIO_NUM_2;											\
+		if(traceStarted)																\
+		{																				\
+			/* set clock pin low*/														\
+			gpio_set_level(CLOCK_PIN, 0);												\
+			/* set data pin low*/														\
+			gpio_set_level(DATA_PIN, 0);												\
+			/* add debug code here to indicate which task is now running */				\
+			for(uint8_t charItr = 0; charItr < configMAX_TASK_NAME_LEN; charItr++)		\
+			{																			\
+				uint8_t currentChar = pxCurrentTCB->pcTaskName[charItr];				\
+				if(currentChar != 0)													\
+				{																		\
+					/* for each bit in character */											\
+					for(int bit = 0; bit < 8; bit++)										\
+					{																		\
+						if(currentChar>>bit & 0x1)											\
+						{																	\
+							/* if bit is set then set data pin high */						\
+							gpio_set_level(DATA_PIN, 1);									\
+						}																	\
+						else																\
+						{																	\
+							/* if bit is low then set data pin low */						\
+							gpio_set_level(DATA_PIN, 0);									\
+						}																	\
+						/*	set clock pin high	*/											\
+						gpio_set_level(CLOCK_PIN, 1);										\
+						/*	kill some instruction cycle		*/								\
+						gpio_set_level(CLOCK_PIN, 1);										\
+						/* set clock pin low*/												\
+						gpio_set_level(CLOCK_PIN, 0);										\
+					}																		\
+				}																			\
+				else																	\
+				{																		\
+					charItr = configMAX_TASK_NAME_LEN;									\
+				}																		\
+			}																			\
+			/* set clock pin low*/														\
+			gpio_set_level(CLOCK_PIN, 0);												\
+			/* set data pin low*/														\
+			gpio_set_level(DATA_PIN, 0);												\
+		}																				\
 	}																					
 #endif
 

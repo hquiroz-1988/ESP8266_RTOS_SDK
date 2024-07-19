@@ -210,9 +210,6 @@ portBASE_TYPE xPortStartScheduler(void)
     soc_set_ccount(0);
     _xt_tick_timer_init();
     
-    /* call trace init function */
-    traceSTART();
-
     vTaskSwitchContext();
 
     /* Restore the context of the first task that is going to run. */
