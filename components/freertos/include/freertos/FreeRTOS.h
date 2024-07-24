@@ -368,10 +368,6 @@ extern bool traceStarted;
 						/* set clock pin low*/												\
 						gpio_set_level(CLOCK_PIN, 0);										\
 					}																		\
-					/*	set clock pin high	*/												\
-					gpio_set_level(CLOCK_PIN, 0);											\
-					/* set data pin high*/													\
-					gpio_set_level(DATA_PIN, 0);											\
 				}																			\
 				else																		\
 				{																			\
