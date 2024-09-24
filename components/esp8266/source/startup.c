@@ -40,6 +40,7 @@
 extern esp_err_t esp_pthread_init(void);
 extern void chip_boot(void);
 extern int base_gpio_init(void);
+bool traceStarted = false;
 
 static inline int should_load(uint32_t load_addr)
 {
@@ -70,6 +71,9 @@ static void user_init_entry(void *param)
 
     esp_phy_init_clk();
     assert(base_gpio_init() == 0);
+
+    /* call trace init function */
+    traceSTART();
 
     if (esp_reset_reason_early() != ESP_RST_FAST_SW) {
         assert(esp_mac_init() == ESP_OK);
