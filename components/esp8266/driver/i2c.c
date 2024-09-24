@@ -58,6 +58,9 @@ static const char *I2C_TAG = "i2c";
 
 #define i2c_master_wait    os_delay_us
 
+#define THROW_ACK_ERR
+#undef  THROW_ACK_ERR
+
 typedef struct {
     uint8_t byte_num;     /*!< cmd byte number */
     struct {
@@ -109,6 +112,16 @@ static i2c_obj_t *p_i2c_obj[I2C_NUM_MAX] = {0};
 static i2c_config_t *i2c_config[I2C_NUM_MAX] = {NULL};
 static i2c_last_state_t *i2c_last_state[I2C_NUM_MAX] = {NULL};
 
+
+/**
+ * @brief I2C master set data and clock lines
+ *        @note
+ *        this function also stretches the clock line based on the desired 
+ *        clock frequency, the delay is a blocking delay
+ * @param i2c_num I2C port number
+ * @param sda data line desired state
+ * @param sda clock line desired state
+ */
 static inline void i2c_master_set_dc(i2c_port_t i2c_num, uint8_t sda, uint8_t scl)
 {
     uint32_t i = 0;
@@ -533,12 +546,14 @@ static void i2c_master_cmd_begin_static(i2c_port_t i2c_num)
                     i2c_master_wait(1);
                     i2c_master_set_dc(i2c_num, 1, 0);
 
+                    #ifdef  THROW_ACK_ERR
                     if (cmd->ack.en == 1) {
                         if ((retVal & 0x01) != cmd->ack.exp) {
                             p_i2c->status = I2C_STATUS_ACK_ERROR;
                             return ;
                         }
                     }
+                    #endif
                 }
             }
             break;
