@@ -186,7 +186,7 @@ esp_err_t i2c_master_write_byte(i2c_cmd_handle_t cmd_handle, uint8_t data, bool 
  *
  * @param cmd_handle I2C cmd link
  * @param data data to send
- * @param data_len data length
+ * @param data_len data length, max length is 256 chars
  * @param ack_en enable ack check for master
  *
  * @return
