@@ -59,7 +59,7 @@ static const char *I2C_TAG = "i2c";
 #define i2c_master_wait    os_delay_us
 
 #define THROW_ACK_ERR
-#undef  THROW_ACK_ERR
+// #undef  THROW_ACK_ERR
 
 typedef struct {
     uint8_t byte_num;     /*!< cmd byte number */
