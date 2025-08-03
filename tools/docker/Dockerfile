@@ -1,6 +1,6 @@
-FROM ubuntu:18.04
+FROM ubuntu:22.04
 
-ARG DEBIAN_FRONTEND=noninteractive
+# ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y \
     vim \
@@ -36,7 +36,7 @@ RUN python -m pip install --upgrade pip virtualenv
 #   IDF_CLONE_BRANCH_OR_TAG=release/vX.Y
 #   IDF_CHECKOUT_REF=<some commit on release/vX.Y branch>.
 
-ARG IDF_CLONE_URL=https://github.com/espressif/ESP8266_RTOS_SDK.git
+ARG IDF_CLONE_URL=https://github.com/hquiroz-1988/ESP8266_RTOS_SDK.git
 ARG IDF_CLONE_BRANCH_OR_TAG=master
 ARG IDF_CHECKOUT_REF=
 
