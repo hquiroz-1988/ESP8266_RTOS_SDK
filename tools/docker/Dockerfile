@@ -65,6 +65,7 @@ ENV IDF_CCACHE_ENABLE=1
 
 COPY entrypoint.sh /opt/esp/entrypoint.sh
 
-ENTRYPOINT [ "/opt/esp/entrypoint.sh" ]
+# ENTRYPOINT [ "/opt/esp/entrypoint.sh" ]
+ENTRYPOINT [ "/home/esp/ESP8266_RTOS_SDK/tools/docker/entrypoint.sh" ]
 
 CMD [ "/bin/bash" ]
