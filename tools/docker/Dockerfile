@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y \
     libusb-1.0-0-dev \
     make \
     ninja-build \
-    python3 \
+    python3.9 \
     python3-pip \
     unzip \
     wget \
