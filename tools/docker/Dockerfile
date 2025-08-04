@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y \
     libusb-1.0-0-dev \
     make \
     ninja-build \
-    python3.9 \
+    python3 \
     python3-pip \
     unzip \
     wget \
@@ -37,7 +37,7 @@ RUN python -m pip install --upgrade pip virtualenv
 #   IDF_CHECKOUT_REF=<some commit on release/vX.Y branch>.
 
 ARG IDF_CLONE_URL=https://github.com/hquiroz-1988/ESP8266_RTOS_SDK.git
-ARG IDF_CLONE_BRANCH_OR_TAG=86e02c96075435209d182edabe040281f2ee20d1
+ARG IDF_CLONE_BRANCH_OR_TAG=feature/automated-docker-build
 ARG IDF_CHECKOUT_REF=
 
 ENV IDF_PATH=/opt/esp/ESP8266_RTOS_SDK
