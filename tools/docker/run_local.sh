@@ -11,6 +11,6 @@ sudo docker run \
   --name esp8266-container \
   --volume "${HOST_WORKDIR}":"${WORKDIR}" \
   --workdir "${WORKDIR}" \
-  $TAG \
+  -it $TAG \
   $COMMAND
 
