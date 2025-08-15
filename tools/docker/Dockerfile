@@ -37,8 +37,7 @@ RUN python -m pip install --upgrade pip virtualenv
 #   IDF_CHECKOUT_REF=<some commit on release/vX.Y branch>.
 
 ARG IDF_CLONE_URL=https://github.com/hquiroz-1988/ESP8266_RTOS_SDK.git
-# !TODO: change this back to master brnch when the feature is merged
-ARG IDF_CLONE_BRANCH_OR_TAG=feature/automated-docker-build
+ARG IDF_CLONE_BRANCH_OR_TAG=master
 ARG IDF_CHECKOUT_REF=
 
 ENV IDF_PATH=/opt/esp/ESP8266_RTOS_SDK
