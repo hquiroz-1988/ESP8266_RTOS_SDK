@@ -37,6 +37,7 @@ RUN python -m pip install --upgrade pip virtualenv
 #   IDF_CHECKOUT_REF=<some commit on release/vX.Y branch>.
 
 ARG IDF_CLONE_URL=https://github.com/hquiroz-1988/ESP8266_RTOS_SDK.git
+# !TODO: change this back to master brnch when the feature is merged
 ARG IDF_CLONE_BRANCH_OR_TAG=feature/automated-docker-build
 ARG IDF_CHECKOUT_REF=
 
@@ -63,9 +64,8 @@ RUN  $IDF_PATH/tools/idf_tools.py --non-interactive install cmake \
 # Ccache is installed, enable it by default
 ENV IDF_CCACHE_ENABLE=1
 
-COPY ESP8266_RTOS_SDK/tools/docker/entrypoint.sh /opt/esp/entrypoint.sh
+COPY entrypoint.sh /opt/esp/entrypoint.sh
 
-# setting entrypoint to run the entrypoint script
 ENTRYPOINT [ "/opt/esp/entrypoint.sh" ]
 
 CMD [ "/bin/bash" ]
