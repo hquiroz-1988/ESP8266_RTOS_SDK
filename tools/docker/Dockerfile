@@ -63,7 +63,7 @@ RUN  $IDF_PATH/tools/idf_tools.py --non-interactive install cmake \
 # Ccache is installed, enable it by default
 ENV IDF_CCACHE_ENABLE=1
 
-COPY entrypoint.sh /opt/esp/entrypoint.sh
+COPY ESP8266_RTOS_SDK/entrypoint.sh /opt/esp/entrypoint.sh
 
 ENTRYPOINT [ "/opt/esp/entrypoint.sh" ]
 
